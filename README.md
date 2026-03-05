@@ -7,7 +7,7 @@ The frontend captures live camera frames and sends them to the backend. The back
 ---
 
 ## System Architecture
-  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+  ┌────────────┐   ┌────────────┐  ┌────────────┐   ┌────────────┐ 
   
   │ Next.js │─────▶│ Express │─────▶│ FastAPI │─────▶│ ML Service │─────▶│ Backend │─────▶│ Frontend │
 
