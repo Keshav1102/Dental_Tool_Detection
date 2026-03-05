@@ -7,11 +7,11 @@ The frontend captures live camera frames and sends them to the backend. The back
 ---
 
 ## System Architecture
-  ┌──────────────┐   ┌───────────────┐  ┌───────────────┐   ┌───────────────┐ 
+
   
   │ Next.js │─────▶│ Express │─────▶│ FastAPI │─────▶│ ML Service │─────▶│ Backend │─────▶│ Frontend │
 
-(port 3000) (port 5000) (port 8000)
+  (port 3000) (port 5000) (port 8000)
 
 
 - **Frontend (Next.js)** – captures video frames, converts them to base64, and emits them via Socket.IO. It receives annotated images and displays them.
