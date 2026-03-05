@@ -9,7 +9,7 @@ The frontend captures live camera frames and sends them to the backend. The back
 ## System Architecture
 
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Next.js │─────▶│ Express │─────▶│ FastAPI │
+    │ Next.js │─────▶│ Express │─────▶│ FastAPI │
 │ Frontend │◀─────│ Backend │◀─────│ ML Service │
 └─────────────┘ └─────────────┘ └─────────────┘ 
 (port 3000) (port 5000) (port 8000)
