@@ -7,15 +7,11 @@ The frontend captures live camera frames and sends them to the backend. The back
 ---
 
 ## System Architecture
-
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Next.js │─────▶│ Express │─────▶│ FastAPI │
-│ Frontend │◀─────│ Backend │◀─────│ ML Service │
-└─────────────┘ └─────────────┘ └─────────────┘ 
+  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+│ Next.js │─────▶│ Express │─────▶│ FastAPI │─────▶│ ML Service │─────▶│ Backend │─────▶│ Frontend │
 
 (port 3000) (port 5000) (port 8000)
 
-text
 
 - **Frontend (Next.js)** – captures video frames, converts them to base64, and emits them via Socket.IO. It receives annotated images and displays them.
 - **Express Backend** – acts as a proxy. It assigns a unique `requestId` to each frame, forwards it to the ML service, and routes responses back to the correct frontend client.
@@ -43,7 +39,6 @@ dental-tool-detection/
 ├── backend/ # Express server
 └── ml-api/ # FastAPI + YOLO service
 
-text
 
 ### 2. Set up the ML API (FastAPI)
 
@@ -52,7 +47,7 @@ Navigate to the `ml-api` directory.
 - Install Python dependencies:
 pip install fastapi uvicorn python-socketio opencv-python-headless numpy ultralytics
 
-text
+
 - Create a folder `model` and place your trained `.pt` file inside (e.g., `model/best.pt`).
 - Create the inference module (`inference.py`) that defines a `YOLOModel` class for loading the model and running predictions.
 - Create the main FastAPI app (`main.py`) that:
@@ -69,7 +64,7 @@ Navigate to the `backend` directory.
 npm init -y
 npm install express cors socket.io socket.io-client
 
-text
+
 - Create `server.js` with the following logic:
 - Create an Express app and HTTP server.
 - Attach a Socket.IO server for frontend connections (CORS enabled).
@@ -86,11 +81,11 @@ Navigate to the `frontend` directory.
 - Create a new Next.js app (if not already present):
 npx create-next-app@latest . --use-npm
 
-text
+
 - Install Socket.IO client:
 npm install socket.io-client
 
-text
+
 - Create a page (e.g., `app/page.js`) that:
 - Uses `useRef` to access a hidden video element and canvas for frame capture.
 - Uses `useState` for connection status, FPS, and the annotated image.
@@ -106,28 +101,28 @@ text
 Start each component in a separate terminal, in the following order:
 
 1. **ML API**
- ```bash
+ bash
  cd ml-api
  uvicorn main:app --host 0.0.0.0 --port 8000
-You should see ✅ ML API: model loaded. and Socket.IO connection logs.
+ You should see ✅ ML API: model loaded. and Socket.IO connection logs.
 
-Express Backend
+2. **Express Backend**
 
-bash
-cd backend
-node server.js
-Expected output: ✅ Connected to ML API and 🚀 Express backend running on http://localhost:5000.
+ bash
+ cd backend
+ node server.js
+ Expected output: ✅ Connected to ML API and 🚀 Express backend running on http://localhost:5000.
 
-Next.js Frontend
+3. **Next.js Frontend**
 
-bash
-cd frontend
-npm run dev
-Open http://localhost:3000 in your browser.
+ bash
+ cd frontend
+ npm run dev
+ Open http://localhost:3000 in your browser.
 
 Once the frontend loads, grant camera permission. You will see the live video feed replaced by an annotated stream once detections start arriving.
 
-Usage
+## Usage
 Hold a dental tool (scalpel, drill, etc.) in front of the camera.
 
 If the model detects it with sufficient confidence, a green bounding box with the tool name and confidence will appear on the displayed image.
@@ -136,7 +131,7 @@ Use the slider to adjust the frames per second (FPS) sent to the backend. Lower 
 
 The connection status is shown at the top.
 
-Troubleshooting
+## Troubleshooting
 Symptom	Possible Cause	Solution
 Frontend shows "Waiting for annotated frames..."	No detections received	Check browser console for WebSocket errors; verify Express and ML API are running.
 ML API model fails to load	PyTorch 2.6 weights_only security	Add torch.serialization.add_safe_globals([ultralytics.nn.tasks.DetectionModel]) before loading.
@@ -152,7 +147,7 @@ Batch processing: If multiple frames arrive quickly, the ML API could process th
 
 Lower resolution: Resize frames to a smaller size (e.g., 320x320) before sending to reduce bandwidth and inference time.
 
-Future Improvements
+## Future Improvements
 Add authentication and rate limiting.
 
 Support multiple camera streams.
