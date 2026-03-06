@@ -9,14 +9,14 @@ The frontend captures live camera frames and sends them to the backend. The back
 ## System Architecture
 
   
-  │ Next.js │─────▶│ Express │─────▶│ FastAPI │─────▶│ ML Service │─────▶│ Backend │─────▶│ Frontend │
-
-  (port 3000) (port 5000) (port 8000)
+  │Next.js│─────▶│Express.js│─────▶│FastAPI│─────▶│ML Service│─────▶│Express.js│─────▶│Next.js│
 
 
-- **Frontend (Next.js)** – captures video frames, converts them to base64, and emits them via Socket.IO. It receives annotated images and displays them.
-- **Express Backend** – acts as a proxy. It assigns a unique `requestId` to each frame, forwards it to the ML service, and routes responses back to the correct frontend client.
-- **ML Service (FastAPI + Socket.IO)** – loads a YOLO model, runs inference on incoming frames, draws bounding boxes and labels, and emits the annotated image (base64) along with detection metadata.
+
+
+- **Frontend (Next.js)** – captures video frames, converts them to base64, and emits them via Socket.IO. It receives annotated images and displays them.   (port 3000)
+- **Express Backend** – acts as a proxy. It assigns a unique `requestId` to each frame, forwards it to the ML service, and routes responses back to the correct frontend client.   (port 5000)
+- **ML Service (FastAPI + Socket.IO)** – loads a YOLO model, runs inference on incoming frames, draws bounding boxes and labels, and emits the annotated image (base64) along with detection metadata.  (port 8000)
 
 All components communicate over **WebSocket** (via Socket.IO) for minimal latency.
 
